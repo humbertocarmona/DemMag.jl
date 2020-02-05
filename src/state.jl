@@ -1,4 +1,3 @@
-
 mutable struct State
     N::Int64
     r::Vector{Array{Float64}}
@@ -27,6 +26,7 @@ mutable struct State
     lastactive::Int64
     fcontact::Vector{Array{Float64}} # LJ force
     fmag::Vector{Array{Float64}}
+    fnormal::Vector{Array{Float64}} # normal
 
     δt::Float64
     diam::Float64
@@ -68,12 +68,14 @@ mutable struct State
         lastactive = 0
         fcontact = zeroVec(N)
         fmag = zeroVec(N)
+        fg = zeroVec(N)
+
         ζc = [zeros(3) for i=1:N, j=1:N]
         ζw = [zeros(3) for i=1:N]
 
         new(N, r, r0, v, v0, a, a1, a2, a3, τ, m, m0, w,
             q, q0, qv, qv0, qa ,qa1, qa2, qa3,
-            active, lastactive, fcontact, fmag,
+            active, lastactive, fcontact, fmag, fg,
             δt, diam, L, vinit, dipmag, ζc, ζw,[],[])
     end
 end

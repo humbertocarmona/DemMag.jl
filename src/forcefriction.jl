@@ -1,11 +1,11 @@
 function forceFriction!(
-    p::State;
-    kt::Float64 = 0.01,
-    μ::Float64 = 0.01,
-    γn::Float64 = 0.0,
-    γw::Float64 = 0.05,
-    R::Float64 = 0.5
-)
+                        p::State;
+                        kt::Float64 = 0.01,
+                        μ::Float64 = 0.01,
+                        γn::Float64 = 0.0,
+                        γw::Float64 = 0.05,
+                        R::Float64 = 0.5
+                    )
     khat = [0.0, 0.0, 1.0]
     fn = 1.0
     for i = 1:p.N

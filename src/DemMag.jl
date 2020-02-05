@@ -21,6 +21,8 @@ module DemMag
     include("forcemagdipole.jl")
     include("forcefriction.jl")
     include("forcerandom.jl")
+    include("forcefloor.jl")
+    include("forcegravity.jl")
     include("demStep.jl")
     include("constrain.jl")
     include("utils.jl")

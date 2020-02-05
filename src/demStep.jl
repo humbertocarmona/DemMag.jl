@@ -9,7 +9,9 @@ function demStep!(p::State,
     p.τ = zeroVec(N)
 
     Ucontact = forceSpring!(p)
+    Ufloor = forceFloor!(p)
     Umag = forceMag!(p)
+    Ugrav = forceGrav!(p)
     forceFriction!(p)
 
     computeQa!(p)
@@ -17,5 +19,5 @@ function demStep!(p::State,
     correctorQ!(p)
 
     constrain!(p, Ri)
-    return Ucontact+Umag
+    return Ucontact+Umag+Ufloor+Ugrav
 end

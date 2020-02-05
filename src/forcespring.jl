@@ -1,10 +1,10 @@
 function forceSpring!(
-    p::State,
-    kn::Float64 = 100.0,
-    kt::Float64 = 1.0,
-    μ::Float64 = 0.3,
-    γn::Float64 = 0.5
-)
+                        p::State,
+                        kn::Float64 = 100.0,
+                        kt::Float64 = 1.0,
+                        μ::Float64 = 0.3,
+                        γn::Float64 = 0.5
+                    )
 
     R = 0.5
     D = 1.0 # 2*R

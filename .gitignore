@@ -5,7 +5,7 @@
 *.jld
 /results/
 /data/
+/temp/
 .DS_Store
 /Manifest.toml
 /dev/
-/t1/
