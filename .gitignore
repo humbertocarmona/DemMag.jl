@@ -1,0 +1,11 @@
+*.jl.*.cov
+*.jl.cov
+*.jl.mem
+*.vtu
+*.jld
+/results/
+/data/
+.DS_Store
+/Manifest.toml
+/dev/
+/t1/

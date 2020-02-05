@@ -1,0 +1,4 @@
+name = "DemMag"
+uuid = "1440ad45-a43c-4528-a1e1-fe2f013fc145"
+authors = ["Humberto Carmona <carmona@fisica.ufc.br>"]
+version = "0.1.0"
