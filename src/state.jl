@@ -34,7 +34,7 @@ mutable struct State
     vinit::Array{Float64,1}
     dipmag::Array{Float64,1}
     ζc::Array{Array{Float64,1},2}
-    ζw::Array{Array{Float64,1},1}
+    ζf::Array{Array{Float64,1},1}
     neighMag::Vector{Tuple{Int64,Int64}}
     neighCon::Vector{Tuple{Int64,Int64}}
     function State(;N::Int=10, δt::Float64=0.001,
@@ -71,11 +71,11 @@ mutable struct State
         fg = zeroVec(N)
 
         ζc = [zeros(3) for i=1:N, j=1:N]
-        ζw = [zeros(3) for i=1:N]
+        ζf = [zeros(3) for i=1:N]
 
         new(N, r, r0, v, v0, a, a1, a2, a3, τ, m, m0, w,
             q, q0, qv, qv0, qa ,qa1, qa2, qa3,
             active, lastactive, fcontact, fmag, fg,
-            δt, diam, L, vinit, dipmag, ζc, ζw,[],[])
+            δt, diam, L, vinit, dipmag, ζc, ζf,[],[])
     end
 end
