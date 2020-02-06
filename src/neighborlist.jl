@@ -1,32 +1,20 @@
-shiftcell2d = [(0, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]
-shiftcell3d = [
-    [0 0 0],
-    [1 0 0],
-    [-1 1 0],
-    [0 1 0],
-    [1 1 0],
-    [-1 0 1],
-    [0 0 1],
-    [1 0 1],
-    [-1 1 1],
-    [0 1 1],
-    [1 1 1],
-    [-1 -1 1],
-    [0 -1 1],
-    [1 -1 1],
-]
-
-#TODO cell list is a linked list for each cell
+shiftcell = [[0, 0, 0],[1, 0, 0],[-1, 1, 0],[0, 1, 0],[1, 1, 0],
+    [-1, 0, 1],[0, 0, 1],[1, 0, 1],[-1, 1, 1],[0, 1, 1],[1, 1, 1],
+    [-1, -1, 1],[0, -1, 1],[1, -1, 1]]
 function cellList(p::State, cellw::Vector{Float64})
     nx, ny, nz = Int.(floor.(p.L ./ cellw))
-    celllists = [MutableLinkedList() for i = 1:nx, j = 1:ny]
+    celllists = [MutableLinkedList() for i = 1:nx, j = 1:ny, k=1:nz]
     nonemptycells = []
+    C = 0.5p.L
     for n = 1:p.N
-        i, j, k = Int.( p.r[n] .÷ cellw ) .+ 1
+        r = p.r[n] + C
+        i, j, k = Int.(r.÷ cellw ) .+ 1  # the origin is at the C
         if i > 0 && i <= nx
             if j > 0 && j <= ny
-                push!(celllists[i, j], n)
-                push!(nonemptycells, (i, j))
+                if k > 0 && k <= nz
+                    push!(celllists[i, j, k], n)
+                    push!(nonemptycells, [i, j, k])
+                end
             end
         end
     end
@@ -34,20 +22,21 @@ function cellList(p::State, cellw::Vector{Float64})
 end
 
 
-function neighborList(p::State, cellw::Vector{Float64}, dc::Float64)
+function neighborList(p::State, cellw::Vector{Float64}, dc::Float64;t=0)
     dc2 = dc^2
     nx, ny, nz = Int.(floor.(p.L ./ cellw))
-    nshift = 5
+    nshift = 14
     cellist, nonEmptyCells = cellList(p, cellw)
-    neighborlist::Array{Tuple{Int64,Int64},1} = []
 
-    for (i0, j0) in nonEmptyCells
-        l0 = cellist[i0, j0]
+    neighborlist::Array{Tuple{Int64,Int64},1} = []
+    for V0 in nonEmptyCells
+        l0 = cellist[V0[1], V0[2], V0[3]]
+
         for s = 1:nshift
-            (i1, j1) = (i0, j0) .+ shiftcell2d[s]
-            if (0 < i1 ≤ nx) && (0 < j1 ≤ ny)
-                l1 = cellist[i1,j1]
-                cond1 = (i1,j1) ≠ (i0,j0)
+            V1 = V0 + shiftcell[s]
+            if (0 < V1[1] ≤ nx) && (0 < V1[2] ≤ ny) && (0 < V1[3] ≤ ny)
+                l1 = cellist[V1[1],V1[2], V1[3]]
+                cond1 = V1 ≠ V0
                 for i in l0
                     for j in l1
                         if cond1 || i > j
@@ -62,5 +51,6 @@ function neighborList(p::State, cellw::Vector{Float64}, dc::Float64)
             end
         end
     end
+
     neighborlist
 end

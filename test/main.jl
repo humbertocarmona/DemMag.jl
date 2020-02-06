@@ -8,29 +8,21 @@ using Plots
 plotly()
 
 stepInit = 0
-stepEnd = 100000
-stepSaveSnap = 500
-stepDisplay = 500
+stepEnd = 2501
+stepSaveSnap = 50
+stepDisplay = 50
 stepSaveState = 1_000_000
 
-N = 100
+N = 20
 diam = 1.0
 v0 = [0.0, 0.2, 0.005]
-L = [111.0, 111.0, 1.0]
-Ri = 500.0
+L = [101.0, 101.0, 15.0]
+Ri = 10.0
 mag = [0.0, 0.3, 0.0]
 γn = 0.05
 
-p = initAsWire(diam, mag, v0, L, N, Ri)
-# p, N = initFromCSV(L,"./test/inputdata.csv")
-
-cellMag = [5diam, 5diam, 5diam]
-neighRadiusMag = 5.0diam
-neighShellWidthMag = 0.1neighRadiusMag
-neighCutMag = neighRadiusMag + neighShellWidthMag
-p.neighMag = neighborList(p, cellMag, neighCutMag)
-
-maxDisplacementMag = 0.0
+# p = initAsWire(diam, mag, v0, L, N, Ri)
+p = initFromCSV(L, "inputdata.csv")
 
 cellCont = [1.0diam, 1.0diam, 1.0diam]
 neighRadiusCont = 1.0diam
@@ -38,6 +30,15 @@ neighShellWidthCont = 0.1neighRadiusCont
 neighCutCont = neighRadiusCont + neighShellWidthCont
 p.neighCon = neighborList(p, cellCont, neighCutCont)
 maxDisplacementCont = 0.0
+
+
+cellMag = [5diam, 5diam, 5diam]
+neighRadiusMag = 5.0diam
+neighShellWidthMag = 0.1neighRadiusMag
+neighCutMag = neighRadiusMag + neighShellWidthMag
+p.neighMag = neighborList(p, cellMag, neighCutMag)
+maxDisplacementMag = 0.0
+
 
 p.δt = 0.001
 
@@ -70,7 +71,7 @@ for t = stepInit:stepEnd
 
     global maxDisplacementCont += dmax
     if maxDisplacementCont > neighShellWidthCont
-        p.neighCon = neighborList(p, cellCont,  neighCutCont)
+        p.neighCon = neighborList(p, cellCont,  neighCutCont; t=t)
         global maxDisplacementCont = 0.0
     end
 
@@ -79,10 +80,10 @@ for t = stepInit:stepEnd
         push!(stp, t)
         push!(pot, U)
         push!(kin, K)
-        println(lpad(t, 7, "0"), " fz=", p.fnormal[1])
+        println(lpad(t, 7, "0"))
     end
 end
 
-p1 = plot(stp, pot, label = "U")
-plot!(stp, kin, label = "K")
-plot!(stp, pot .+ kin, label = "T")
+# p1 = plot(stp, pot, label = "U")
+# plot!(stp, kin, label = "K")
+# plot!(stp, pot .+ kin, label = "T")
