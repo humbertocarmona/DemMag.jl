@@ -2,7 +2,11 @@ function forceMag!(p::State; rc2::Float64 = 100.0)
     potEnergy = 0.0
     p.fmag = zeroVec(p.N)
     for (i, j) in p.neighMag
-        if p.active[i] + p.active[j] > 0
+        active = (p.active[i] + p.active[j])>0
+        # even though force on inactive partices has no effect
+        # they still act on the active ones as long as they are on the
+        # neighbor list.
+        if active
             dr = p.r[j] - p.r[i]
             r2 = dot(dr, dr)
             if r2 <= rc2

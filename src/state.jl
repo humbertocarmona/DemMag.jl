@@ -27,21 +27,22 @@ mutable struct State
     fcontact::Vector{Array{Float64}} # LJ force
     fmag::Vector{Array{Float64}}
     fnormal::Vector{Array{Float64}} # normal
+    fgrav::Vector{Array{Float64}} # normal
 
     δt::Float64
-    diam::Float64
+    R::Float64
     L::Array{Float64,1}
-    vinit::Array{Float64,1}
-    dipmag::Array{Float64,1}
+    vo::Array{Float64,1}
+    mag::Array{Float64,1}
     ζc::Array{Array{Float64,1},2}
     ζf::Array{Array{Float64,1},1}
     neighMag::Vector{Tuple{Int64,Int64}}
     neighCon::Vector{Tuple{Int64,Int64}}
     function State(;N::Int=10, δt::Float64=0.001,
                     L::Array{Float64,1}=[100.0, 100.0, 100.0],
-                    diam::Float64=1.0,
-                    vinit::Array{Float64,1}=[0.0, 0.0, 0.0],
-                    dipmag::Array{Float64,1}=[0.0, 0.0, 0.0])
+                    R::Float64=1.0,
+                    vo::Array{Float64,1}=[0.0, 0.0, 0.0],
+                    mag::Array{Float64,1}=[0.0, 0.0, 0.0])
         r = zeroVec(N)
         r0 = zeroVec(N)
         v = zeroVec(N)
@@ -68,14 +69,15 @@ mutable struct State
         lastactive = 0
         fcontact = zeroVec(N)
         fmag = zeroVec(N)
-        fg = zeroVec(N)
+        fnormal = zeroVec(N)
+        fgrav = zeroVec(N)
 
         ζc = [zeros(3) for i=1:N, j=1:N]
         ζf = [zeros(3) for i=1:N]
 
         new(N, r, r0, v, v0, a, a1, a2, a3, τ, m, m0, w,
             q, q0, qv, qv0, qa ,qa1, qa2, qa3,
-            active, lastactive, fcontact, fmag, fg,
-            δt, diam, L, vinit, dipmag, ζc, ζf,[],[])
+            active, lastactive, fcontact, fmag, fnormal,fgrav,
+            δt, R, L, vo, mag, ζc, ζf,[],[])
     end
 end

@@ -11,7 +11,7 @@ import re
 arrowvar = 'mag'
 arrowscal = 1.0
 particelevar = 'active'
-
+L = [220.0, 220.0, 20.0]
 #### disable automatic camera reset on 'Show'
 paraview.simple._DisableFirstRenderCameraReset()
 findCommand ='find {:}  -regex "{:}" |sort'.format("./",".*snap_.*\.vtu")
@@ -119,28 +119,35 @@ glyph2Display = Show(glyph2, renderView1)
 # ColorBy(glyph1Display, None)
 # ColorBy(glyph2Display, None)
 
-L=111.0
 line1 = Line()
-line1.Point1 = [0.0, L/2, 0.0]
-line1.Point2 = [L, L/2, 0.0]
+
+line1.Point1 = [-L[0]/2, 0, 0.0]
+line1.Point2 = [L[0]/2, 0, 0.0]
 line1Display = Show(line1, renderView1)
 line1Display.Opacity = 0.2
 
 line2 = Line()
-line2.Point1 = [L/2, 0.0, 0.0]
-line2.Point2 = [L/2, L, 0.0]
+line2.Point1 = [0, -L[1]/2, 0.0]
+line2.Point2 = [0, L[1]/2, 0.0]
 line2Display = Show(line2, renderView1)
 line2Display.Opacity = 0.2
 
-plane1 = Plane()
-plane1.Origin = [0.0, 0.0, 0.0]
-plane1.Point1 = [0.0, 111.0, 0.0]
-plane1.Point2 = [111.0, 0.0, 0.0]
-plane1.XResolution = 10
-plane1.YResolution = 10
-plane1Display = Show(plane1, renderView1)
-plane1Display.Representation = 'Outline'
-plane1Display.SetRepresentationType('Outline')
+# plane1 = Plane()
+# plane1.Origin = [-L[0]/2, -L[1]/2, 0.0]
+# plane1.Point1 = [L[0]/2, -L[1]/2, 0.0]
+# plane1.Point2 = [ -L[0]/2, L[1]/2, 0.0]
+# plane1.XResolution = 10
+# plane1.YResolution = 10
+# plane1Display = Show(plane1, renderView1)
+# plane1Display.Representation = 'Outline'
+# plane1Display.SetRepresentationType('Outline')
+
+box1 = Box()
+box1.XLength = L[0]
+box1.YLength = L[1]
+box1.ZLength = L[2]
+box1Display = Show(box1, renderView1)
+box1Display.Representation = 'Wireframe'
 
 SetActiveSource(snap_0)
 # get color transfer function/color map for 'fcontact'
@@ -166,6 +173,6 @@ renderView1.Update()
 # current camera placement for renderView1
 renderView1.ResetCamera()
 renderView1.InteractionMode = '2D'
-renderView1.CameraPosition = [55.0, 55., 150]
-renderView1.CameraFocalPoint = [55., 55., 0.5]
+renderView1.CameraPosition = [0, 0, 20]
+renderView1.CameraFocalPoint = [0, 0, 0]
 renderView1.CameraParallelScale = 60.0

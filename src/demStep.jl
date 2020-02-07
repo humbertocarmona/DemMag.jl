@@ -1,6 +1,5 @@
 function demStep!(p::State,
-                  t::Int64,
-                  Ri::Float64=100.0)
+                  t::Int64)
     predictor!(p)
     predictorQ!(p)
     N = p.N
@@ -18,6 +17,6 @@ function demStep!(p::State,
     corrector!(p)
     correctorQ!(p)
 
-    constrain!(p, Ri)
+    constrain!(p)
     return Ucontact+Umag+Ufloor+Ugrav
 end

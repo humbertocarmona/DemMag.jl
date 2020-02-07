@@ -6,15 +6,16 @@ function forceSpring!(
                         γn::Float64 = 0.5
                     )
 
-    R = 0.5
-    D = 1.0 # 2*R
-    D2 = 1.0 # D^2
+    R = p.R
+    D = 2*R
+    D2 = D^2
     N = p.N
     potEnergy = 0.0
     p.fcontact = zeroVec(N)
     incontact = zeros(N,N)
     for (i, j) in p.neighCon
-        if p.active[i] + p.active[j] > 0
+        active = (p.active[i] + p.active[j])>0
+        if active
             dr = p.r[j] - p.r[i]
             dr2 = dot(dr, dr)
             if dr2 < D2

@@ -13,6 +13,7 @@ module DemMag
     include("integrate.jl")
     include("init_wire.jl")
     include("init_csv.jl")
+    include("init_jld.jl")
     include("linklist.jl")
     include("neighborlist.jl")
     include("writesnap.jl")

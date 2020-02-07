@@ -14,7 +14,7 @@ function initFromCSV(L::Array{Float64,1}, fname::String)
         p.qa[i] = evalQa(p.q[i],p.qv[i],p.τ[i])
         p.active[i] = 1
     end
-    p.lastactive=1
+    p.lastactive=i
     p.r0 = copy(p.r)
     p.m0 = copy(p.m)
     p.v0 = copy(p.v)
