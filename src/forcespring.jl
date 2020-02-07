@@ -1,9 +1,9 @@
 function forceSpring!(
                         p::State,
-                        kn::Float64 = 100.0,
+                        kn::Float64 = 200.0,
                         kt::Float64 = 1.0,
-                        μ::Float64 = 0.3,
-                        γn::Float64 = 0.5
+                        μ::Float64 = 0.5,
+                        γn::Float64 = 1.0
                     )
 
     R = p.R
@@ -30,36 +30,36 @@ function forceSpring!(
                 p.ζc[i, j] += vt * p.δt
                 p.ζc[j, i] = p.ζc[i, j]
                 ζ = LinearAlgebra.norm(p.ζc[i, j])
-                ftn = kt*ζ
                 fn = kn*ϵ
+
                 fμ = μ*fn
+                ftn = kt*ζ
                 if ftn > fμ
                     ftn = fμ
-                    p.ζc[j, i] = p.ζc[i, j] = zeros(3)
+                    p.ζc[i, j] -= vt * p.δt
+                    p.ζc[j, i] = p.ζc[i, j]
                 end
                 that = LinearAlgebra.normalize(vt)
 
                 ft = -ftn*that
-                fj = fn * rhat - γn * vn + ft #
+                fj = fn * rhat - γn * vn
                 τ = - R * cross(rhat, ft)
 
-                p.a[j] = p.a[j] + fj
-                p.a[i] = p.a[i] - fj
+                p.a[j] = p.a[j] + fj + ft
+                p.a[i] = p.a[i] - fj - ft
 
                 p.τ[i] = p.τ[i] + τ
                 p.τ[j] = p.τ[j] + τ
-
-                p.fcontact[j] = p.fcontact[j] + fj
-                p.fcontact[i] = p.fcontact[i] - fj
-
+                p.fcontact[j] = p.fcontact[j] + fj + ft
+                p.fcontact[i] = p.fcontact[i] - fj - ft
                 potEnergy += 0.5 * kn * ϵ^2
 
             end
         end
     end
-    nic = findall(x->x==0, incontact)
-    for idx in nic
-        p.ζc[idx] = zeros(3)
-    end
+    # nic = findall(x->x==0, incontact)
+    # for idx in nic
+    #     p.ζc[idx] = zeros(3)
+    # end
     return potEnergy
 end

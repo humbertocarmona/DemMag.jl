@@ -21,6 +21,15 @@ function writeSnapshot(p::State, t::Int64)
         [p.fmag[i][2] for i = 1:N],
         [p.fmag[i][3] for i = 1:N],
     )
+
+    vtkfile["ftot"] = (
+        [p.a[i][1] for i = 1:N],
+        [p.a[i][2] for i = 1:N],
+        [p.a[i][3] for i = 1:N],
+    )
+
+
+
     vtkfile["idx"] = [i for i = 1:N]
 
     vtkfile["mag"] = (

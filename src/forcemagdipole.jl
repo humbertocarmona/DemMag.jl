@@ -27,6 +27,9 @@ function forceMag!(p::State; rc2::Float64 = 100.0)
                      5.0 * mir * mjr * ir2 * dr
                 fj = 3.0 * ir5 * fj
 
+                n = ir*dr
+                fn = dot(fj,n)*n
+                ft = fj - fn
 
                 τi = cross(p.m[i], bj)
                 τj = cross(p.m[j], bi)
@@ -35,8 +38,10 @@ function forceMag!(p::State; rc2::Float64 = 100.0)
                 p.a[i] = p.a[i] - fj
                 p.τ[i] = p.τ[i] + τi
                 p.τ[j] = p.τ[j] + τj
+
                 p.fmag[j] = p.fmag[j] + fj
                 p.fmag[i] = p.fmag[i] - fj
+
             end
         end
     end

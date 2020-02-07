@@ -1,7 +1,7 @@
 function initFromCSV(L::Array{Float64,1}, fname::String)
     df = CSV.read(fname)
     N = size(df,1)
-    p =  State(N=N, L=L)
+    p =  State(N=N, L=L, R = 0.5*df.diam[1])
     for i = 1:N
         p.r[i] = [df.x[i], df.y[i], df.z[i]]
         p.v[i] = [df.vx[i], df.vy[i], df.vz[i]]
@@ -12,9 +12,10 @@ function initFromCSV(L::Array{Float64,1}, fname::String)
         p.m[i] = rotationQ(p.q[i], p.m[i])
         p.qv[i] = evalQv(p.q[i], p.w[i])
         p.qa[i] = evalQa(p.q[i],p.qv[i],p.τ[i])
-        p.active[i] = 1
+        p.active[i] = df.on[i]
     end
-    p.lastactive=i
+    p.lastactive=N
+    p.mag = p.m[1]
     p.r0 = copy(p.r)
     p.m0 = copy(p.m)
     p.v0 = copy(p.v)

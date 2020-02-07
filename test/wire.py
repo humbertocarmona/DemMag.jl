@@ -9,9 +9,12 @@ from subprocess import check_output
 import re
 
 arrowvar = 'mag'
-arrowscal = 1.0
+arrowscal = 0.3
 particelevar = 'active'
 L = [220.0, 220.0, 20.0]
+L = [50,50, 10.0]
+R = 0.5 #0.442
+
 #### disable automatic camera reset on 'Show'
 paraview.simple._DisableFirstRenderCameraReset()
 findCommand ='find {:}  -regex "{:}" |sort'.format("./",".*snap_.*\.vtu")
@@ -25,7 +28,7 @@ print(files[1],"..",files[-1])
 
 # create a new 'XML Unstructured Grid Reader'
 snap_0 = XMLUnstructuredGridReader(FileName=files)
-snap_0.PointArrayStatus = ['vel', 'mag', 'angvel', 'idx', 'active', 'fcontact', 'fmag']
+snap_0.PointArrayStatus = ['vel', 'mag', 'angvel', 'idx', 'active', 'fcontact', 'fmag', 'ftot']
 
 # get animation scene
 animationScene1 = GetAnimationScene()
@@ -44,7 +47,7 @@ renderView1 = GetActiveViewOrCreate('RenderView')
 # show data in view
 snap_0Display = Show(snap_0, renderView1)
 snap_0Display.Representation = 'Point Gaussian'
-snap_0Display.GaussianRadius = 0.5
+snap_0Display.GaussianRadius = R
 snap_0Display.ColorArrayName = ['Points', particelevar]
 snap_0Display.OSPRayScaleArray = particelevar
 snap_0Display.OSPRayScaleFunction = 'PiecewiseFunction'

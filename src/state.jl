@@ -40,7 +40,7 @@ mutable struct State
     neighCon::Vector{Tuple{Int64,Int64}}
     function State(;N::Int=10, δt::Float64=0.001,
                     L::Array{Float64,1}=[100.0, 100.0, 100.0],
-                    R::Float64=1.0,
+                    R::Float64=0.5,
                     vo::Array{Float64,1}=[0.0, 0.0, 0.0],
                     mag::Array{Float64,1}=[0.0, 0.0, 0.0])
         r = zeroVec(N)

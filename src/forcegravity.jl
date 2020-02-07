@@ -1,4 +1,4 @@
-function forceGrav!(p::State;g::Vector{Float64} = [0.0, 0.0, -0.005])
+function forceGrav!(p::State;g::Vector{Float64} = [0.0, 0.0, -0.01])
     potEnergy = 0.0
     p.fgrav =  zeroVec(p.N)
     for i = 1:p.N
