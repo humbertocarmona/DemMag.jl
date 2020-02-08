@@ -6,16 +6,18 @@ using Plots
 
 # function main()
 stepInit = 0
-stepEnd = 80000
-stepSaveSnap = 500
-stepDisplay = 500
+stepEnd = 300_000
+stepSaveSnap = 1000
+stepDisplay = 1000
 stepSaveState = 100_000_000
 
 N = 100
 diam = 1.0
-cellCont = [1.0*diam, 1.0*diam, 1.0*diam]
-cellMag = [5*diam, 5*diam, 2*diam]
-L = [100,100, 10.0]
+rc_cont = 1.0*diam
+rc_mag = 5*diam
+cellCont = [rc_cont, rc_cont, rc_cont]
+cellMag = [rc_mag, rc_mag, rc_mag]
+L = [100,100, 50.0]
 vo = [0.0, 0.0, 0.0]
 mag = [0.0, 1.0, 0.0]
 
@@ -24,16 +26,14 @@ p = initFromCSV(L, "inputdata.csv")
 
 # p,dummy = DemMag.initFromJLD("wire_1.jld"; diam=diam)
 
-neighRadiusCont = 1.0*diam
-neighShellWidthCont = 0.1neighRadiusCont
-neighCutCont = neighRadiusCont + neighShellWidthCont
+neighShellWidthCont = 0.1*rc_cont
+neighCutCont = rc_cont + neighShellWidthCont
 p.neighCon = neighborList(p, cellCont, neighCutCont)
 maxDisplacementCont = 0.0
 
 
-neighRadiusMag = 5.0*diam
-neighShellWidthMag = 0.1*neighRadiusMag
-neighCutMag = neighRadiusMag + neighShellWidthMag
+neighShellWidthMag = 0.1*rc_mag
+neighCutMag = rc_mag + neighShellWidthMag
 p.neighMag = neighborList(p, cellMag, neighCutMag)
 maxDisplacementMag = 0.0
 
@@ -45,7 +45,8 @@ pot = []
 kin = []
 println()
 println("#------a------------- running ---------------------")
-removeFilesMaching(r"snap_.+\.vtu", "./")
+mkpath("snaps")
+removeFilesMaching(r"snap_.+\.vtu", "./snaps/")
 println("#------------------- ------- ---------------------")
 for t = stepInit:stepEnd
     if mod(t, stepSaveSnap) == 0
@@ -77,7 +78,7 @@ for t = stepInit:stepEnd
         push!(pot, U)
         push!(kin, K)
         # (lpad(t, 5, "0"))
-        println("t = $t $(p.fcontact[2]) $(p.fnormal[2])")
+        println("t = $t $(p.fmag[1])")
     end
 end
 

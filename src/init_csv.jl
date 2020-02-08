@@ -14,7 +14,6 @@ function initFromCSV(L::Array{Float64,1}, fname::String)
         p.qa[i] = evalQa(p.q[i],p.qv[i],p.τ[i])
         p.active[i] = df.on[i]
     end
-    p.lastactive=N
     p.mag = p.m[1]
     p.r0 = copy(p.r)
     p.m0 = copy(p.m)

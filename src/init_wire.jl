@@ -24,7 +24,6 @@ function initAsWire(;diam::Float64 = 1.0,
         p.active[i] = 0
     end
     p.active[1] = 1
-    p.lastactive = 1
     p.r0 = copy(p.r)
     p.m0 = copy(p.m)
     p.v0 = copy(p.v)

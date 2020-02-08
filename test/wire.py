@@ -179,3 +179,9 @@ renderView1.InteractionMode = '2D'
 renderView1.CameraPosition = [0, 0, 20]
 renderView1.CameraFocalPoint = [0, 0, 0]
 renderView1.CameraParallelScale = 60.0
+
+
+renderView1.CameraPosition = [120, 0, 0]
+renderView1.CameraFocalPoint = [0, 0, 0]
+renderView1.CameraParallelScale = 60.0
+renderView1.CameraViewUp = [0.,0.,1.]

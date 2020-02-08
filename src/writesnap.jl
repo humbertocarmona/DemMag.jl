@@ -1,7 +1,7 @@
 function writeSnapshot(p::State, t::Int64)
     N = p.N
     step = lpad(t, 7, "0")
-    fname = "snap_$step.vtu"
+    fname = "./snaps/snap_$step.vtu"
     x = [p.r[i][1] for i = 1:N]
     y = [p.r[i][2] for i = 1:N]
     z = [p.r[i][3] for i = 1:N]

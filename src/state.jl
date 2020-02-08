@@ -23,7 +23,6 @@ mutable struct State
     qa2::Array{Quaternion{Float64}}
     qa3::Array{Quaternion{Float64}}
     active::Array{Int16}
-    lastactive::Int64
     fcontact::Vector{Array{Float64}} # LJ force
     fmag::Vector{Array{Float64}}
     fnormal::Vector{Array{Float64}} # normal
@@ -66,7 +65,6 @@ mutable struct State
         qa3 = zeroQuat(N)
 
         active = [0 for i=1:N]
-        lastactive = 0
         fcontact = zeroVec(N)
         fmag = zeroVec(N)
         fnormal = zeroVec(N)
@@ -77,7 +75,7 @@ mutable struct State
 
         new(N, r, r0, v, v0, a, a1, a2, a3, τ, m, m0, w,
             q, q0, qv, qv0, qa ,qa1, qa2, qa3,
-            active, lastactive, fcontact, fmag, fnormal,fgrav,
+            active, fcontact, fmag, fnormal,fgrav,
             δt, R, L, vo, mag, ζc, ζf,[],[])
     end
 end

@@ -1,6 +1,7 @@
 function forceMag!(p::State; rc2::Float64 = 100.0)
     potEnergy = 0.0
     p.fmag = zeroVec(p.N)
+
     for (i, j) in p.neighMag
         active = (p.active[i] + p.active[j])>0
         # even though force on inactive partices has no effect
@@ -23,8 +24,7 @@ function forceMag!(p::State; rc2::Float64 = 100.0)
                 bj = 3 * mjr * ir5 * dr - ir3 * p.m[j]
 
                 potEnergy = potEnergy - dot(p.m[i], bj)
-                fj = mir * p.m[j] + mjr * p.m[i] + mimj * dr -
-                     5.0 * mir * mjr * ir2 * dr
+                fj = mir * p.m[j] + mjr * p.m[i] + mimj * dr - 5.0 * mir * mjr * ir2 * dr
                 fj = 3.0 * ir5 * fj
 
                 n = ir*dr
@@ -36,8 +36,8 @@ function forceMag!(p::State; rc2::Float64 = 100.0)
 
                 p.a[j] = p.a[j] + fj
                 p.a[i] = p.a[i] - fj
-                p.τ[i] = p.τ[i] + τi
                 p.τ[j] = p.τ[j] + τj
+                p.τ[i] = p.τ[i] + τi
 
                 p.fmag[j] = p.fmag[j] + fj
                 p.fmag[i] = p.fmag[i] - fj
