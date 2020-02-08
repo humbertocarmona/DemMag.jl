@@ -1,8 +1,8 @@
 function forceFloor!(p::State;
-                    kn = 200.0,
-                    kt::Float64 = 10.0,
-                    μ::Float64 = 0.8,
-                    γn::Float64 = 1.0)
+                    kn = 100.0,
+                    kt::Float64 = 1.0,
+                    μ::Float64 = 1.0,
+                    γn::Float64 = 5.0)
     N = p.N
     potEnergy = 0.0
     khat = [0.0, 0.0, 1.0]
@@ -22,7 +22,7 @@ function forceFloor!(p::State;
                 fμ = μ*fn
                 if ftn > fμ
                     ftn = fμ
-                    p.ζf[i] = zeros(3)
+                    p.ζf[i] -= p.δt*vt
                 end
                 that = LinearAlgebra.normalize(vt)
                 ft = -ftn*that

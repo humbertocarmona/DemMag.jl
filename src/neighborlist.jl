@@ -34,7 +34,7 @@ function neighborList(p::State, cellw::Vector{Float64}, dc::Float64;t=0)
 
         for s = 1:nshift
             V1 = V0 + shiftcell[s]
-            if (0 < V1[1] ≤ nx) && (0 < V1[2] ≤ ny) && (0 < V1[3] ≤ ny)
+            if (0 < V1[1] ≤ nx) && (0 < V1[2] ≤ ny) && (0 < V1[3] ≤ nz)
                 l1 = cellist[V1[1],V1[2], V1[3]]
                 cond1 = V1 ≠ V0
                 for i in l0

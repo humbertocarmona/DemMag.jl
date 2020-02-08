@@ -6,10 +6,10 @@ using Plots
 
 # function main()
 stepInit = 0
-stepEnd = 300_000
+stepEnd = 100000
 stepSaveSnap = 1000
 stepDisplay = 1000
-stepSaveState = 100_000_000
+stepSaveState = 300_000
 
 N = 100
 diam = 1.0
@@ -17,14 +17,14 @@ rc_cont = 1.0*diam
 rc_mag = 5*diam
 cellCont = [rc_cont, rc_cont, rc_cont]
 cellMag = [rc_mag, rc_mag, rc_mag]
-L = [100,100, 50.0]
+L = [2.1*N*rc_cont,2.1*N*rc_cont, 3*rc_mag]
 vo = [0.0, 0.0, 0.0]
-mag = [0.0, 1.0, 0.0]
+mag = [0.0, 0.4, 0.0]
 
 # p = initAsWire(diam=diam, mag=mag, vo=vo, L=L, N=N, ro=[0.0, 101.5, 0.5])
-p = initFromCSV(L, "inputdata.csv")
+# p = initFromCSV(L, "inputdata.csv")
 
-# p,dummy = DemMag.initFromJLD("wire_1.jld"; diam=diam)
+p,dummy = DemMag.initFromJLD("bent5_05.jld")
 
 neighShellWidthCont = 0.1*rc_cont
 neighCutCont = rc_cont + neighShellWidthCont
@@ -44,7 +44,7 @@ stp = []
 pot = []
 kin = []
 println()
-println("#------a------------- running ---------------------")
+println("#-------------------- running ---------------------")
 mkpath("snaps")
 removeFilesMaching(r"snap_.+\.vtu", "./snaps/")
 println("#------------------- ------- ---------------------")
@@ -82,7 +82,7 @@ for t = stepInit:stepEnd
     end
 end
 
-plotly()
-p1 = plot(stp, pot, label = "U")
-plot!(stp, kin, label = "K")
-plot!(stp, pot .+ kin, label = "E")
+# plotly()
+# p1 = plot(stp, pot, label = "U")
+# plot!(stp, kin, label = "K")
+# plot!(stp, pot .+ kin, label = "E")

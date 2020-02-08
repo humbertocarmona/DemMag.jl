@@ -1,6 +1,6 @@
 function forceSpring!(
                         p::State,
-                        kn::Float64 = 200.0,
+                        kn::Float64 = 100.0,
                         kt::Float64 = 1.0,
                         μ::Float64 = 0.5,
                         γn::Float64 = 1.0
