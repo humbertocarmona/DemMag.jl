@@ -1,4 +1,4 @@
-function forceHertz!(p::State,
+function forceHertz!(st::State,
                     N::Int64,
                     neigh::Vector{Any};
                     R::Float64=0.5,
@@ -13,10 +13,10 @@ function forceHertz!(p::State,
     ufac = 2.0*ffac/5.0     # factor multiplying potential energy
 
     potEnergy = 0.0
-    p.fcontact = zeroVec(N)
+    st.fcontact = zeroVec(N)
     for (i,j) in neigh
-        if p.active[i] + p.active[j] > 0
-            dr = p.r[j] - p.r[i]
+        if st.active[i] + st.active[j] > 0
+            dr = st.r[j] - st.r[i]
             r2 = dot(dr,dr)
             if r2 < D2
                 r = sqrt(r2)
@@ -25,24 +25,24 @@ function forceHertz!(p::State,
                 rhat = dr./r
                 potEnergy += ufac*ϵ
 
-                dv = p.v[j] - p.v[i]
+                dv = st.v[j] - st.v[i]
                 dvn = dot(dv,rhat)*rhat
-                vt = dv - dvn - R*cross(p.w[i],rhat) - R*cross(p.w[j],rhat)
+                vt = dv - dvn - R*cross(st.w[i],rhat) - R*cross(st.w[j],rhat)
 
                 fj = ffac*ϵ32*rhat - γn*dvn - γn*vt
                 τ = R*cross(rhat, vt)
 
-                p.a[j] = p.a[j] + fj
-                p.a[i] = p.a[i] - fj
+                st.a[j] = st.a[j] + fj
+                st.a[i] = st.a[i] - fj
 
-                p.τ[i] = p.τ[i] + γt*τ
-                p.τ[j] = p.τ[j] + γt*τ
+                st.τ[i] = st.τ[i] + γt*τ
+                st.τ[j] = st.τ[j] + γt*τ
 
-                p.fcontact[j] = p.fcontact[j] + fj
-                p.fcontact[i] = p.fcontact[i] - fj
+                st.fcontact[j] = st.fcontact[j] + fj
+                st.fcontact[i] = st.fcontact[i] - fj
 
             end
         end
     end
-    return potEnergy
+    return stotEnergy
 end

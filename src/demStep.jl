@@ -1,22 +1,22 @@
-function demStep!(p::State,
+function demStep!(st::State,
                   t::Int64)
-    predictor!(p)
-    predictorQ!(p)
-    N = p.N
+    predictor!(st)
+    predictorQ!(st)
+    N = st.N
 
-    p.a = zeroVec(N)
-    p.τ = zeroVec(N)
+    st.a = zeroVec(N)
+    st.τ = zeroVec(N)
 
-    Ucontact = forceSpring!(p)
-    Ufloor = forceFloor!(p)
-    Umag = forceMag!(p)
-    Ugrav = forceGrav!(p)
-    forceFriction!(p)
+    Ucontact = forceSpring!(st)
+    Ufloor = forceFloor!(st)
+    Umag = forceMag!(st)
+    Ugrav = forceGrav!(st)
+    forceFriction!(st)
 
-    computeQa!(p)
-    corrector!(p)
-    correctorQ!(p)
+    computeQa!(st)
+    corrector!(st)
+    correctorQ!(st)
 
-    constrain!(p)
+    constrain!(st)
     return Ucontact+Umag+Ufloor+Ugrav
 end

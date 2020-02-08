@@ -1,22 +1,22 @@
 function forceSpring!(
-                        p::State,
+                        st::State,
                         kn::Float64 = 100.0,
                         kt::Float64 = 0.5,
                         μ::Float64 = 0.2,
                         γn::Float64 = 0.5
                     )
 
-    R = p.R
+    R = st.R
     D = 2*R
     D2 = D^2
-    N = p.N
+    N = st.N
     potEnergy = 0.0
-    p.fcontact = zeroVec(N)
+    st.fcontact = zeroVec(N)
     incontact = zeros(N,N)
-    for (i, j) in p.neighCon
-        active = (p.active[i] + p.active[j])>0
+    for (i, j) in st.neighCon
+        active = (st.active[i] + st.active[j])>0
         if active
-            dr = p.r[j] - p.r[i]
+            dr = st.r[j] - st.r[i]
             dr2 = dot(dr, dr)
             if dr2 < D2
                 incontact[i,j] = incontact[j,i] = 1
@@ -24,20 +24,20 @@ function forceSpring!(
                 ϵ = D - d # deformation
                 rhat = dr ./ d
 
-                dv = p.v[j] - p.v[i]
+                dv = st.v[j] - st.v[i]
                 vn = dot(dv, rhat) * rhat
-                vt = dv - vn - R * cross(p.w[i], rhat) - R * cross(p.w[j], rhat)
-                p.ζc[i, j] += vt * p.δt
-                p.ζc[j, i] = p.ζc[i, j]
-                ζ = LinearAlgebra.norm(p.ζc[i, j])
+                vt = dv - vn - R * cross(st.w[i], rhat) - R * cross(st.w[j], rhat)
+                st.ζc[i, j] += vt * st.δt
+                st.ζc[j, i] = st.ζc[i, j]
+                ζ = LinearAlgebra.norm(st.ζc[i, j])
                 fn = kn*ϵ
 
                 fμ = μ*fn
                 ftn = kt*ζ
                 if ftn > fμ
                     ftn = fμ
-                    p.ζc[i, j] -= vt * p.δt
-                    p.ζc[j, i] = p.ζc[i, j]
+                    st.ζc[i, j] -= vt * st.δt
+                    st.ζc[j, i] = st.ζc[i, j]
                 end
                 that = LinearAlgebra.normalize(vt)
 
@@ -45,13 +45,13 @@ function forceSpring!(
                 fj = fn * rhat - γn * vn
                 τ = - R * cross(rhat, ft)
 
-                p.a[j] = p.a[j] + fj + ft
-                p.a[i] = p.a[i] - fj - ft
+                st.a[j] = st.a[j] + fj + ft
+                st.a[i] = st.a[i] - fj - ft
 
-                p.τ[i] = p.τ[i] + τ
-                p.τ[j] = p.τ[j] + τ
-                p.fcontact[j] = p.fcontact[j] + fj + ft
-                p.fcontact[i] = p.fcontact[i] - fj - ft
+                st.τ[i] = st.τ[i] + τ
+                st.τ[j] = st.τ[j] + τ
+                st.fcontact[j] = st.fcontact[j] + fj + ft
+                st.fcontact[i] = st.fcontact[i] - fj - ft
                 potEnergy += 0.5 * kn * ϵ^2
 
             end
@@ -59,7 +59,7 @@ function forceSpring!(
     end
     # nic = findall(x->x==0, incontact)
     # for idx in nic
-    #     p.ζc[idx] = zeros(3)
+    #     st.ζc[idx] = zeros(3)
     # end
     return potEnergy
 end

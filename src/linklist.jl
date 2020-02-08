@@ -3,7 +3,7 @@ mutable struct LinkList
     nx::Int16
     chead::Array{Int16}
     cnext::Array{Int16}
-    function LinkList(nx::Int64, np::Int64)
+    function LinkList(nx::Int64, nst::Int64)
         chead = zeros(nx^2)
         cnext =  zeros(np)
         new(nx, chead, cnext)
@@ -32,5 +32,5 @@ function incell(l::LinkList, c)
         push!(p, n)
         n = l.cnext[n]
     end
-    return p
+    return st
 end

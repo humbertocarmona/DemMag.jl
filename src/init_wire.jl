@@ -10,26 +10,26 @@ function initAsWire(;diam::Float64 = 1.0,
 
     for i = 1:N
         (x,y,z) = ro -i*diam*u
-        p.r[i] = [x, y, z]
-        p.v[i] = vo
-        p.a[i] = [0.0, 0.0, 0.0]
-        p.w[i] = [0.0, 0.0, 0.0]
-        p.m[i] = mag
-        p.τ[i] = [0.,0.,0.]
-        p.q[i] = qrotation([0.0,0.0,1.0], 0.0)
-        R = rotationmatrix(p.q[i])
-        p.m[i] = R*p.m[i]
-        p.qv[i] = evalQv(p.q[i], p.w[i])
-        p.qa[i] = evalQa(p.q[i],p.qv[i],p.τ[i])
-        p.active[i] = 0
+        st.r[i] = [x, y, z]
+        st.v[i] = vo
+        st.a[i] = [0.0, 0.0, 0.0]
+        st.w[i] = [0.0, 0.0, 0.0]
+        st.m[i] = mag
+        st.τ[i] = [0.,0.,0.]
+        st.q[i] = qrotation([0.0,0.0,1.0], 0.0)
+        R = rotationmatrix(st.q[i])
+        st.m[i] = R*st.m[i]
+        st.qv[i] = evalQv(st.q[i], st.w[i])
+        st.qa[i] = evalQa(st.q[i],st.qv[i],st.τ[i])
+        st.active[i] = 0
     end
-    p.active[1] = 1
-    p.r0 = copy(p.r)
-    p.m0 = copy(p.m)
-    p.v0 = copy(p.v)
-    p.qv0 = copy(p.qv)
-    p.qa1 = copy(p.qa)
-    p.qa2 = copy(p.qa)
-    p.qa3 = copy(p.qa)
-    return p
+    st.active[1] = 1
+    st.r0 = copy(st.r)
+    st.m0 = copy(st.m)
+    st.v0 = copy(st.v)
+    st.qv0 = copy(st.qv)
+    st.qa1 = copy(st.qa)
+    st.qa2 = copy(st.qa)
+    st.qa3 = copy(st.qa)
+    return st
 end

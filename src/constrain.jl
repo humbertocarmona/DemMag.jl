@@ -1,19 +1,19 @@
-function constrain!(p::State)
+function constrain!(st::State)
 u = [0.0, 1.0, 0.0]
 
-    for i = 1:p.N
-        inside = dot(p.r[i], u) > 0.0
-        if  p.active[i] == 0 && inside
-            p.active[i] = 1
+    for i = 1:st.N
+        inside = dot(st.r[i], u) > 0.0
+        if  st.active[i] == 0 && inside
+            st.active[i] = 1
         end
-        if p.active[i] == 0
-            p.v[i] = p.vo
-            p.a[i] = [0.0,0.0,0.0]
-            p.w[i] = [0.0,0.0,0.0]
-            p.q[i] = qrotation(p.w[i], 0.0)
-            p.qv[i] = evalQv(p.q[i], p.w[i])
-            p.qa[i] = evalQa(p.q[i],p.qv[i],p.τ[i])
-            p.τ[i] = [0.0,0.0,0.0]
+        if st.active[i] == 0
+            st.v[i] = st.vo
+            st.a[i] = [0.0,0.0,0.0]
+            st.w[i] = [0.0,0.0,0.0]
+            st.q[i] = qrotation(st.w[i], 0.0)
+            st.qv[i] = evalQv(st.q[i], st.w[i])
+            st.qa[i] = evalQa(st.q[i],st.qv[i],st.τ[i])
+            st.τ[i] = [0.0,0.0,0.0]
 
         end
     end

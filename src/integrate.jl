@@ -32,98 +32,98 @@ cv = SVector{4}([97.0 / 360.0,
                   -39.0 / 360.0,
                   8.0 / 360.0])
 
-function predictor!(p::State)
-      p.r0 = copy(p.r)
-      p.v0 = copy(p.v)
-      δt = p.δt
+function predictor!(st::State)
+      st.r0 = copy(st.r)
+      st.v0 = copy(st.v)
+      δt = st.δt
       δt2 = δt^2
-      for i = 1:p.N
-            p.r[i] = p.r[i] + δt * p.v[i] +
-                     δt2 * (pr[1] * p.a[i] + pr[2] * p.a1[i] + pr[3] * p.a2[i] +
-                      pr[4] * p.a3[i])
+      for i = 1:st.N
+            st.r[i] = st.r[i] + δt * st.v[i] +
+                     δt2 * (pr[1] * st.a[i] + pr[2] * st.a1[i] + pr[3] * st.a2[i] +
+                      pr[4] * st.a3[i])
 
-            p.v[i] = (p.r[i] - p.r0[i]) / δt +
-                     δt * (pv[1] * p.a[i] + pv[2] * p.a1[i] + pv[3] * p.a2[i] +
-                      pv[4] * p.a3[i])
+            st.v[i] = (st.r[i] - st.r0[i]) / δt +
+                     δt * (pv[1] * st.a[i] + pv[2] * st.a1[i] + pv[3] * st.a2[i] +
+                      pv[4] * st.a3[i])
 
 
       end
 
-      p.a3 = copy(p.a2)
-      p.a2 = copy(p.a1)
-      p.a1 = copy(p.a)
+      st.a3 = copy(st.a2)
+      st.a2 = copy(st.a1)
+      st.a1 = copy(st.a)
 
-      return p
+      return st
 end
 
-function corrector!(p::State)
-      δt = p.δt
+function corrector!(st::State)
+      δt = st.δt
       δt2 = δt^2
-      for i = 1:p.N
-            p.r[i] = p.r0[i] + δt * p.v0[i] +
-                     δt2 * (cr[1] * p.a[i] + cr[2] * p.a1[i] +
-                            cr[3] * p.a2[i] + cr[4] * p.a3[i])
+      for i = 1:st.N
+            st.r[i] = st.r0[i] + δt * st.v0[i] +
+                     δt2 * (cr[1] * st.a[i] + cr[2] * st.a1[i] +
+                            cr[3] * st.a2[i] + cr[4] * st.a3[i])
 
-            p.v[i] = (p.r[i] - p.r0[i]) / δt +
-                     δt * (cv[1] * p.a[i] + cv[2] * p.a1[i] +
-                           cv[3] * p.a2[i] +  cv[4] * p.a3[i])
+            st.v[i] = (st.r[i] - st.r0[i]) / δt +
+                     δt * (cv[1] * st.a[i] + cv[2] * st.a1[i] +
+                           cv[3] * st.a2[i] +  cv[4] * st.a3[i])
 
       end
 
-      return p
+      return st
 end
 
-function predictorQ!(p::State)
-      p.q0 = copy(p.q)
-      p.qv0 = copy(p.qv)
-      δt = p.δt
+function predictorQ!(st::State)
+      st.q0 = copy(st.q)
+      st.qv0 = copy(st.qv)
+      δt = st.δt
       δt2 = δt^2
-      for i = 1:p.N
-            p.q[i] = p.q0[i] + δt * p.qv[i] +
-                     δt2 * (pr[1] * p.qa[i] +  pr[2] * p.qa1[i] +
-                            pr[3] * p.qa2[i] + pr[4] * p.qa3[i])
+      for i = 1:st.N
+            st.q[i] = st.q0[i] + δt * st.qv[i] +
+                     δt2 * (pr[1] * st.qa[i] +  pr[2] * st.qa1[i] +
+                            pr[3] * st.qa2[i] + pr[4] * st.qa3[i])
 
-            p.qv[i] = (p.q[i] - p.q0[i]) / δt +
-                     δt * (pv[1] * p.qa[i] + pv[2] * p.qa1[i] +
-                           pv[3] * p.qa2[i] + pv[4] * p.qa3[i])
+            st.qv[i] = (st.q[i] - st.q0[i]) / δt +
+                     δt * (pv[1] * st.qa[i] + pv[2] * st.qa1[i] +
+                           pv[3] * st.qa2[i] + pv[4] * st.qa3[i])
 
-            if !p.q[i].norm
-                  p.q[i] = Quaternions.normalize(p.q[i])
+            if !st.q[i].norm
+                  st.q[i] = Quaternions.normalize(st.q[i])
             end
-            R = rotationmatrix(p.q[i])
-            p.m[i] = R*p.m0[i]
-            # p.m[i] = rotationQ(p.q[i], p.m0[i])
-            p.w[i] = evalW(p.q[i], p.qv[i])
+            R = rotationmatrix(st.q[i])
+            st.m[i] = R*st.m0[i]
+            # st.m[i] = rotationQ(st.q[i], st.m0[i])
+            st.w[i] = evalW(st.q[i], st.qv[i])
       end
-      p.qa3 = copy(p.qa2)
-      p.qa2 = copy(p.qa1)
-      p.qa1 = copy(p.qa)
+      st.qa3 = copy(st.qa2)
+      st.qa2 = copy(st.qa1)
+      st.qa1 = copy(st.qa)
 
-      return p
+      return st
 end
 
-function correctorQ!(p::State)
-      δt = p.δt
+function correctorQ!(st::State)
+      δt = st.δt
       δt2 = δt^2
-      for i = 1:p.N
-            p.q[i] = p.q0[i] + δt * p.qv0[i] +
-                     δt2 * (cr[1] * p.qa[i] +  cr[2] * p.qa1[i] +
-                            cr[3] * p.qa2[i] + cr[4] * p.qa3[i])
+      for i = 1:st.N
+            st.q[i] = st.q0[i] + δt * st.qv0[i] +
+                     δt2 * (cr[1] * st.qa[i] +  cr[2] * st.qa1[i] +
+                            cr[3] * st.qa2[i] + cr[4] * st.qa3[i])
 
-            p.qv[i] = (p.q[i] - p.q0[i]) / δt +
-                      δt * (cv[1] * p.qa[i] +  cv[2] * p.qa1[i] +
-                            cv[3] * p.qa2[i] + cv[4] * p.qa3[i])
-            # if !p.q[i].norm
-            #       p.q[i] = Quaternions.normalize(p.q[i])
+            st.qv[i] = (st.q[i] - st.q0[i]) / δt +
+                      δt * (cv[1] * st.qa[i] +  cv[2] * st.qa1[i] +
+                            cv[3] * st.qa2[i] + cv[4] * st.qa3[i])
+            # if !st.q[i].norm
+            #       st.q[i] = Quaternions.normalize(st.q[i])
             # end
       end
 
-      return p
+      return st
 end
 
 
-function computeQa!(p::State)
-      for i = 1:p.N
-            p.qa[i] = evalQa(p.q[i], p.qv[i], p.τ[i])
+function computeQa!(st::State)
+      for i = 1:st.N
+            st.qa[i] = evalQa(st.q[i], st.qv[i], st.τ[i])
       end
 end

@@ -1,19 +1,19 @@
 shiftcell2d = [(0, 0), (0, 1), (1, -1), (1, 0), (1, 1)]
 
 
-function cellList(p::State,
+function cellList(st::State,
                     cellw::Vector{Float64},
                     L::Tuple{Float64,Float64,Float64},
                     )
     nx, ny, nz = Int.(floor.(L ./ cellw))
     cellw = L ./ [nx, ny, nz]
     ncells = nx*ny*nz
-    llist = LinkList(ncells, p.N)
+    llist = LinkList(ncells, st.N)
     count = 0
-    for n = 1:p.N
-        x,y,z = p.r[n]
+    for n = 1:st.N
+        x,y,z = st.r[n]
         if 0.0 < x <= L[1] &&  0.0 < y  <= L[2]
-            j, i, k = Int.( p.r[n] .÷ cellw ) .+ 1
+            j, i, k = Int.( st.r[n] .÷ cellw ) .+ 1
             c = getc(i, j, nx)
             pushleft!(llist, c ,n)
             count+=1
@@ -24,7 +24,7 @@ end
 
 
 function neighborList(
-                        p::State,
+                        st::State,
                         cellw::Vector{Float64},
                         L::Tuple{Float64,Float64,Float64},
                         dc::Float64,
@@ -51,7 +51,7 @@ function neighborList(
                 for i in l0
                     for j in l1
                         if cond1 || i > j
-                            dr = p.r[j] - p.r[i]
+                            dr = st.r[j] - st.r[i]
                             dr2 = dot(dr, dr)
                             if dr2 < dc2
                                 push!(neighborlist, (i,j))

@@ -21,24 +21,24 @@ L = [2.1*N*rc_cont,2.1*N*rc_cont, 3*rc_mag]
 vo = [0.0, 0.1, 0.0]
 mag = [0.0, 0.4, 0.0]
 
-# p = initAsWire(diam=diam, mag=mag, vo=vo, L=L, N=N, ro=[0.0, 101.5, 0.5])
-# p = initFromCSV(L, "inputdata.csv")
+# st = initAsWire(diam=diam, mag=mag, vo=vo, L=L, N=N, ro=[0.0, 101.5, 0.5])
+# st = initFromCSV(L, "inputdata.csv")
 
-p,dummy = DemMag.initFromJLD("sample_03.jld"; vo = vo, transf=false)
+st,dummy = DemMag.initFromJLD("sample_03.jld"; vo = vo, transf=false)
 
 neighShellWidthCont = 0.1*rc_cont
 neighCutCont = rc_cont + neighShellWidthCont
-p.neighCon = neighborList(p, cellCont, neighCutCont)
+st.neighCon = neighborList(st, cellCont, neighCutCont)
 maxDisplacementCont = 0.0
 
 
 neighShellWidthMag = 0.1*rc_mag
 neighCutMag = rc_mag + neighShellWidthMag
-p.neighMag = neighborList(p, cellMag, neighCutMag)
+st.neighMag = neighborList(st, cellMag, neighCutMag)
 maxDisplacementMag = 0.0
 
 
-p.δt = 0.001
+st.δt = 0.001
 
 stp = []
 pot = []
@@ -50,26 +50,26 @@ removeFilesMaching(r"snap_.+\.vtu", "./snaps/")
 println("#------------------- ------- ---------------------")
 for t = stepInit:stepEnd
     if mod(t, stepSaveSnap) == 0
-        writeSnapshot(p, t)
+        writeSnapshot(st, t)
     end
     if t > 0 && mod(t, stepSaveState) == 0
-        dumpState(p, t)
+        dumpState(st, t)
     end
-    U = demStep!(p, t)
-    v2 = [dot(v, v) for v in p.v]
-    w2 = [dot(w, w) for w in p.w]
+    U = demStep!(st, t)
+    v2 = [dot(v, v) for v in st.v]
+    w2 = [dot(w, w) for w in st.w]
     K = 0.5 * sum(v2) + 0.5 * sum(w2)
-    dmax = p.δt * sqrt(maximum(v2))
+    dmax = st.δt * sqrt(maximum(v2))
 
     global maxDisplacementMag += dmax
     if maxDisplacementMag > neighShellWidthMag
-        p.neighMag = neighborList(p, cellMag, neighCutMag)
+        st.neighMag = neighborList(st, cellMag, neighCutMag)
         global maxDisplacementMag = 0.0
     end
 
     global maxDisplacementCont += dmax
     if maxDisplacementCont > neighShellWidthCont
-        p.neighCon = neighborList(p, cellCont,  neighCutCont; t=t)
+        st.neighCon = neighborList(st, cellCont,  neighCutCont; t=t)
         global maxDisplacementCont = 0.0
     end
 
@@ -78,7 +78,7 @@ for t = stepInit:stepEnd
         push!(pot, U)
         push!(kin, K)
         # (lpad(t, 5, "0"))
-        println("t = $t $(p.fmag[1])")
+        println("t = $t $(st.fmag[1])")
     end
 end
 
