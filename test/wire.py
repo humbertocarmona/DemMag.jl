@@ -8,16 +8,15 @@ from paraview.simple import *
 from subprocess import check_output
 import re
 
-arrowvar = 'mag'
-arrowscal = 0.3
-particelevar = 'active'
-L = [220.0, 220.0, 20.0]
-L = [50,50, 10.0]
+arrowvar = 'vel'
+arrowscal = 0.5
+particelevar = 'vel'
+L = [210.0, 210.0, 15.0]
 R = 0.5 #0.442
 
 #### disable automatic camera reset on 'Show'
 paraview.simple._DisableFirstRenderCameraReset()
-findCommand ='find {:}  -regex "{:}" |sort'.format("./",".*snap_.*\.vtu")
+findCommand ='find {:}  -regex "{:}" |sort'.format("./snaps/",".*snap_.*\.vtu")
 
 files = check_output(findCommand, shell=True)
 files = files.decode("utf-8")
@@ -176,12 +175,8 @@ renderView1.Update()
 # current camera placement for renderView1
 renderView1.ResetCamera()
 renderView1.InteractionMode = '2D'
-renderView1.CameraPosition = [0, 0, 20]
+renderView1.CameraPosition = [0, 0, 100]
 renderView1.CameraFocalPoint = [0, 0, 0]
-renderView1.CameraParallelScale = 60.0
-
-
-renderView1.CameraPosition = [120, 0, 0]
-renderView1.CameraFocalPoint = [0, 0, 0]
-renderView1.CameraParallelScale = 60.0
-renderView1.CameraViewUp = [0.,0.,1.]
+renderView1.CameraViewUp = [0.,1.,0.]
+renderView1.CameraViewAngle = 30
+renderView1.CameraParallelScale = 2.0

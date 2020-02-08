@@ -1,4 +1,4 @@
-function initFromJLD(fname::String; diam::Float64=1.0, nin::Int64=5)
+function initFromJLD(fname::String; vo::Vector{Float64}, diam::Float64=1.0, nin::Int64=5)
     tinit = 0
     st = split(fname, ".")
     st = split(st[1], "_")
@@ -26,8 +26,9 @@ function initFromJLD(fname::String; diam::Float64=1.0, nin::Int64=5)
         p.r0[i] = p.r[i]
         p.m[i] = RT*p.m[i]
         p.m0[i] = RT*p.m0[i]
-        p.v[i] = RT*p.v[i]
+        p.v[i] = RT*p.v[i] + vo
         p.v0[i] = RT*p.v0[i]
+        p.vo = vo
 
         # p.a[i] = [0.0,0.0,0.0]
         p.a[i] = RT*p.a[i]
