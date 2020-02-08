@@ -6,10 +6,10 @@ using Plots
 
 # function main()
 stepInit = 0
-stepEnd = 300000
-stepSaveSnap = 1000
-stepDisplay = 1000
-stepSaveState = 300_000
+stepEnd = 200_000
+stepSaveSnap = 2000
+stepDisplay = 2000
+stepSaveState = 1_000_000
 
 N = 100
 diam = 1.0
@@ -18,13 +18,13 @@ rc_mag = 5*diam
 cellCont = [rc_cont, rc_cont, rc_cont]
 cellMag = [rc_mag, rc_mag, rc_mag]
 L = [2.1*N*rc_cont,2.1*N*rc_cont, 3*rc_mag]
-vo = [0.0, 0.5, 0.0]
+vo = [0.0, 0.1, 0.0]
 mag = [0.0, 0.4, 0.0]
 
 # p = initAsWire(diam=diam, mag=mag, vo=vo, L=L, N=N, ro=[0.0, 101.5, 0.5])
 # p = initFromCSV(L, "inputdata.csv")
 
-p,dummy = DemMag.initFromJLD("bent5_05.jld"; vo = vo)
+p,dummy = DemMag.initFromJLD("sample_03.jld"; vo = vo, transf=false)
 
 neighShellWidthCont = 0.1*rc_cont
 neighCutCont = rc_cont + neighShellWidthCont

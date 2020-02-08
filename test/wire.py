@@ -13,6 +13,7 @@ arrowscal = 0.5
 particelevar = 'vel'
 L = [210.0, 210.0, 15.0]
 R = 0.5 #0.442
+vmax = 0.2
 
 #### disable automatic camera reset on 'Show'
 paraview.simple._DisableFirstRenderCameraReset()
@@ -155,20 +156,14 @@ SetActiveSource(snap_0)
 # get color transfer function/color map for 'fcontact'
 fcontactLUT = GetColorTransferFunction('fcontact')
 fcontactPWF = GetOpacityTransferFunction('fcontact')
-fcontactLUT.RescaleTransferFunction(0.0, 4.5)
-fcontactPWF.RescaleTransferFunction(0.0, 4.5)
-
-# get color transfer function/color map for 'neigh'
-neighLUT = GetColorTransferFunction('neigh')
-neighPWF = GetOpacityTransferFunction('neigh')
-neighLUT.RescaleTransferFunction(0.0, 5.0)
-neighPWF.RescaleTransferFunction(0.0, 5.0)
+fcontactLUT.RescaleTransferFunction(0.0, 1)
+fcontactPWF.RescaleTransferFunction(0.0, 1)
 
 # get color transfer function/color map for 'neigh'
 velLUT = GetColorTransferFunction('vel')
 velPWF = GetOpacityTransferFunction('vel')
-velLUT.RescaleTransferFunction(0.0, 1.0)
-velPWF.RescaleTransferFunction(0.0, 1.0)
+velLUT.RescaleTransferFunction(0.0, vmax)
+velPWF.RescaleTransferFunction(0.0, vmax)
 
 renderView1.Update()
 
