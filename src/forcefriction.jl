@@ -1,8 +1,8 @@
-function forceFriction!(st::State; γn = 0.1, γw = 0.5)
+function forceFriction!(st::State)
     for i = 1:st.N
         if st.active[i]==1
-            st.a[i] = st.a[i] - γn * st.v[i]
-            st.τ[i] = st.τ[i] - γw * st.w[i]
+            st.a[i] = st.a[i] - st.βn * st.v[i]
+            st.τ[i] = st.τ[i] - st.βω * st.ω[i]
         end
     end
 end

@@ -45,8 +45,6 @@ function predictor!(st::State)
             st.v[i] = (st.r[i] - st.r0[i]) / δt +
                      δt * (pv[1] * st.a[i] + pv[2] * st.a1[i] + pv[3] * st.a2[i] +
                       pv[4] * st.a3[i])
-
-
       end
 
       st.a3 = copy(st.a2)
@@ -67,7 +65,6 @@ function corrector!(st::State)
             st.v[i] = (st.r[i] - st.r0[i]) / δt +
                      δt * (cv[1] * st.a[i] + cv[2] * st.a1[i] +
                            cv[3] * st.a2[i] +  cv[4] * st.a3[i])
-
       end
 
       return st
@@ -93,7 +90,7 @@ function predictorQ!(st::State)
             R = rotationmatrix(st.q[i])
             st.m[i] = R*st.m0[i]
             # st.m[i] = rotationQ(st.q[i], st.m0[i])
-            st.w[i] = evalW(st.q[i], st.qv[i])
+            st.ω[i] = evalW(st.q[i], st.qv[i])
       end
       st.qa3 = copy(st.qa2)
       st.qa2 = copy(st.qa1)

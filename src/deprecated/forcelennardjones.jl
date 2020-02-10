@@ -9,6 +9,8 @@ function forceLJ!(st::State,
     [length] = σ
     [mass] = m0
     [time] = sqrt(ε/(m_0 σ))
+
+    DEPRECATED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
     """
     R = 0.5612310241546865  # particle radius
     potEnergy = 0.0
@@ -28,7 +30,7 @@ function forceLJ!(st::State,
                 dv = st.v[j] - st.v[i]
                 rhat = LinearAlgebra.normalize(dr)
                 dvn = dot(dv,rhat)*rhat
-                vt = dv - dvn - R*cross(st.w[i],rhat) - R*cross(st.w[j],rhat)
+                vt = dv - dvn - R*cross(st.ω[i],rhat) - R*cross(st.ω[j],rhat)
 
                 fj = 48.0*(ir14 - 0.5*ir8)*dr - γn*dvn - γn*vt
                 τ = R*cross(rhat, vt)

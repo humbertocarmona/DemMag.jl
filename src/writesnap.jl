@@ -28,8 +28,6 @@ function writeSnapshot(st::State, t::Int64)
         [st.a[i][3] for i = 1:N],
     )
 
-
-
     vtkfile["idx"] = [i for i = 1:N]
 
     vtkfile["mag"] = (
@@ -43,11 +41,12 @@ function writeSnapshot(st::State, t::Int64)
         [st.v[i][2] for i = 1:N],
         [st.v[i][3] for i = 1:N],
     )
+    vtkfile["r"] = (x,y,z)
 
     vtkfile["angvel"] = (
-        [st.w[i][1] for i = 1:N],
-        [st.w[i][2] for i = 1:N],
-        [st.w[i][3] for i = 1:N],
+        [st.ω[i][1] for i = 1:N],
+        [st.ω[i][2] for i = 1:N],
+        [st.ω[i][3] for i = 1:N],
     )
 
     outfile = vtk_save(vtkfile)
@@ -58,5 +57,5 @@ function dumpState(st::State, t::Int64)
     step = lpad(t, 7, "0")
     sn = lpad(st.N,3,"0")
     fname = "state_$(sn)_$step.jld"
-    save(fname,"p",p)
+    save(fname,"p",st)
 end

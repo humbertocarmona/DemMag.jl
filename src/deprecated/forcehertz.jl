@@ -4,7 +4,7 @@ function forceHertz!(st::State,
                     R::Float64=0.5,
                     γt::Float64=0.0,
                     γn::Float64=0.0)
-
+    # DEPRECATED!!!!!!!!!!!!!!!!!111
 
     D2 = 1.0                # (2R)^2 particle diameter squared
     RSq = 0.25              # sqrt(1/(1/R) + 1/(1/R))
@@ -27,7 +27,7 @@ function forceHertz!(st::State,
 
                 dv = st.v[j] - st.v[i]
                 dvn = dot(dv,rhat)*rhat
-                vt = dv - dvn - R*cross(st.w[i],rhat) - R*cross(st.w[j],rhat)
+                vt = dv - dvn - R*cross(st.ω[i],rhat) - R*cross(st.ω[j],rhat)
 
                 fj = ffac*ϵ32*rhat - γn*dvn - γn*vt
                 τ = R*cross(rhat, vt)

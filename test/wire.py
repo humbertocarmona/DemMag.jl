@@ -8,8 +8,8 @@ from paraview.simple import *
 from subprocess import check_output
 import re
 
-arrowvar = 'vel'
-arrowscal = 0.5
+arrowvar = 'fmag'
+arrowscal = 10.5
 particelevar = 'vel'
 L = [210.0, 210.0, 15.0]
 R = 0.5 #0.442
@@ -119,8 +119,8 @@ glyph2.GlyphMode = 'All Points'
 # show data in view
 glyph1Display = Show(glyph1, renderView1)
 glyph2Display = Show(glyph2, renderView1)
-# ColorBy(glyph1Display, None)
-# ColorBy(glyph2Display, None)
+ColorBy(glyph1Display, arrowvar)
+ColorBy(glyph2Display, arrowvar)
 
 line1 = Line()
 

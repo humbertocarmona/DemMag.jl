@@ -39,8 +39,8 @@ function forceMag!(st::State; rc2::Float64 = 100.0)
                 st.τ[j] = st.τ[j] + τj
                 st.τ[i] = st.τ[i] + τi
 
-                st.fmag[j] = st.fmag[j] + fj
-                st.fmag[i] = st.fmag[i] - fj
+                st.fmag[j] = st.fmag[j] + τj
+                st.fmag[i] = st.fmag[i] + τi
 
             end
         end

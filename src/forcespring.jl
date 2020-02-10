@@ -1,10 +1,4 @@
-function forceSpring!(
-                        st::State,
-                        kn::Float64 = 100.0,
-                        kt::Float64 = 0.5,
-                        μ::Float64 = 0.2,
-                        γn::Float64 = 0.5
-                    )
+function forceSpring!(st::State)
 
     R = st.R
     D = 2*R
@@ -26,14 +20,14 @@ function forceSpring!(
 
                 dv = st.v[j] - st.v[i]
                 vn = dot(dv, rhat) * rhat
-                vt = dv - vn - R * cross(st.w[i], rhat) - R * cross(st.w[j], rhat)
+                vt = dv - vn - R * cross(st.ω[i], rhat) - R * cross(st.ω[j], rhat)
                 st.ζc[i, j] += vt * st.δt
                 st.ζc[j, i] = st.ζc[i, j]
                 ζ = LinearAlgebra.norm(st.ζc[i, j])
-                fn = kn*ϵ
+                fn = st.kn*ϵ
 
-                fμ = μ*fn
-                ftn = kt*ζ
+                fμ = st.μ*fn
+                ftn = st.kt*ζ
                 if ftn > fμ
                     ftn = fμ
                     st.ζc[i, j] -= vt * st.δt
@@ -42,7 +36,7 @@ function forceSpring!(
                 that = LinearAlgebra.normalize(vt)
 
                 ft = -ftn*that
-                fj = fn * rhat - γn * vn
+                fj = fn * rhat - st.γn * vn
                 τ = - R * cross(rhat, ft)
 
                 st.a[j] = st.a[j] + fj + ft
@@ -52,7 +46,7 @@ function forceSpring!(
                 st.τ[j] = st.τ[j] + τ
                 st.fcontact[j] = st.fcontact[j] + fj + ft
                 st.fcontact[i] = st.fcontact[i] - fj - ft
-                potEnergy += 0.5 * kn * ϵ^2
+                potEnergy += 0.5 * st.kn * ϵ^2
 
             end
         end

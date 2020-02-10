@@ -10,7 +10,7 @@ mutable struct State
     a3::Vector{Array{Float64}}
     τ::Vector{Array{Float64}} # torque
 
-    w::Vector{Array{Float64}} #angular velocity
+    ω::Vector{Array{Float64}} #angular velocity
     m::Vector{Array{Float64}} # magnetization
     m0::Vector{Array{Float64}} # magnetization
 
@@ -26,22 +26,27 @@ mutable struct State
     fcontact::Vector{Array{Float64}} # LJ force
     fmag::Vector{Array{Float64}}
     fnormal::Vector{Array{Float64}} # normal
-    fgrav::Vector{Array{Float64}} # normal
 
     δt::Float64
     R::Float64
     L::Array{Float64,1}
     vo::Array{Float64,1}
     mag::Array{Float64,1}
-    ζc::Array{Array{Float64,1},2}
-    ζf::Array{Array{Float64,1},1}
+
+    kn::Float64 # normal stiffness - particle-particle, particle-plane
+    kt::Float64 # tangencial stiffness - particle-particle, particle-plane
+    γn::Float64 # normal dumping -  particle-particle, particle-plane
+    μ::Float64  # static friction coefficient - - particle-particle, particle-plane
+    βn::Float64  # viscous dumping
+    βω::Float64  # viscous damping angular velocity
+    g::Vector{Float64} #gravity
+
+    ζc::Array{Array{Float64,1},2} # integrate contact friction
+    ζp::Array{Array{Float64,1},1} # integrate plane friction
     neighMag::Vector{Tuple{Int64,Int64}}
     neighCon::Vector{Tuple{Int64,Int64}}
-    function State(;N::Int=10, δt::Float64=0.001,
-                    L::Array{Float64,1}=[100.0, 100.0, 100.0],
-                    R::Float64=0.5,
-                    vo::Array{Float64,1}=[0.0, 0.0, 0.0],
-                    mag::Array{Float64,1}=[0.0, 0.0, 0.0])
+
+    function State(;N::Int=10)
         r = zeroVec(N)
         r0 = zeroVec(N)
         v = zeroVec(N)
@@ -53,7 +58,7 @@ mutable struct State
         τ = zeroVec(N)
         m = zeroVec(N)
         m0 = zeroVec(N)
-        w = zeroVec(N)
+        ω = zeroVec(N)
 
         q = [qrotation([0.0, 0.0, 1.0], 0.0) for i = 1:N]
         q0 = copy(q)
@@ -68,14 +73,27 @@ mutable struct State
         fcontact = zeroVec(N)
         fmag = zeroVec(N)
         fnormal = zeroVec(N)
-        fgrav = zeroVec(N)
 
         ζc = [zeros(3) for i=1:N, j=1:N]
-        ζf = [zeros(3) for i=1:N]
+        ζp = [zeros(3) for i=1:N]
 
-        new(N, r, r0, v, v0, a, a1, a2, a3, τ, m, m0, w,
-            q, q0, qv, qv0, qa ,qa1, qa2, qa3,
-            active, fcontact, fmag, fnormal,fgrav,
-            δt, R, L, vo, mag, ζc, ζf,[],[])
+        δt = 0.001
+        R = 0.5
+        L = [100.0,100.0,15.0]
+        vo = [0.,0.,0.]
+        mag = [0.,0.,0.]
+        kn = 100.0
+        kt = 0.5
+        γn = 0.2
+        μ = 1.0
+        βn = 0.1
+        βω = 0.5
+        g = [0.0, 0.0, -0.001]
+
+        new(N, r, r0, v, v0, a, a1, a2, a3, τ, m, m0, ω,
+            q, q0, qv, qv0, qa, qa1, qa2, qa3,
+            active, fcontact, fmag, fnormal,
+            δt, R, L, vo, mag, kn, kt, γn, μ, βn, βω, g,
+            ζc, ζp, [], [])
     end
 end

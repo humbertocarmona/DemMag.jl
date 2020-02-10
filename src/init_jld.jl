@@ -1,8 +1,7 @@
 function initFromJLD(fname::String; vo::Vector{Float64},
-    nin::Int64=5,
-    θ::Float64 = π/2,
-    ax::Vector{Float64} = [0.0,1.0, 0.0],
-    transf::Bool=false)
+                    nin::Int64=5, transf::Bool=false,
+                    θ::Float64 = π/2, ax::Vector{Float64} = [0.0,1.0, 0.0])
+    
     tinit = 0
     fstr = split(fname, ".")
     fstr = split(fstr[1], "_")
@@ -35,9 +34,9 @@ function initFromJLD(fname::String; vo::Vector{Float64},
 
             # st.a[i] = [0.0,0.0,0.0]
             st.a[i] = RT*st.a[i]
-            st.w[i] = RT*st.w[i]
-            st.q[i] = qrotation(st.w[i], 0.0)
-            st.qv[i] = evalQv(st.q[i], st.w[i])
+            st.ω[i] = RT*st.ω[i]
+            st.q[i] = qrotation(st.ω[i], 0.0)
+            st.qv[i] = evalQv(st.q[i], st.ω[i])
             st.qa[i] = evalQa(st.q[i],st.qv[i],st.τ[i])
             st.τ[i] = [0.0,0.0,0.0]
             if i > nin
