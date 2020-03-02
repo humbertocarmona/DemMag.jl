@@ -6,35 +6,44 @@ using Plots
 
 println("#------------------- ------- ---------------------")
 mkpath("snaps")
-removeFilesMaching(r"snap_.+\.vtu", "./snaps/")
+# removeFilesMaching(r"snap_.+\.vtu", "./snaps/")
 println("#------------------- ------- ---------------------")
 
 
-
-N = 10
+N = 100
 diam = 1.0
-rc_cont = 1.0*diam
-rc_mag = 5*diam
-cellCont = [rc_cont, rc_cont, rc_cont]
-cellMag = [rc_mag, rc_mag, rc_mag]
-L = [100.0, 50.0, 15.0]
-vo = [0.0, 0.1, 0.0]
-mag = [0.0, 0.4, 0.0]
-
-st = initAsWire(diam=diam, mag=mag, vo=vo, L=L, N=N, ro=[0.0, 6.5, 0.5])
+rc_con = 1.1*diam
+rc_mag = 5.1*diam
+cellCont = [rc_con, rc_con, rc_con]
+cellMag =  [rc_mag, rc_mag, rc_mag]
+L = [N*rc_con, 2*N*rc_con, 3*rc_mag]
+println("L = $L")
+mag = [0.0, 0.3, 0.0]
+vo = [0.0,0.0,0.0]
+# st = initAsWire(N=N,
+#                 L=L,
+#                 diam=diam,
+#                 mag=mag,
+#                 vo=vo,
+#                 ro=[0.0, 102.5, 0.5])
 # st = initFromCSV("inputdata.csv", L=L)
 
-# st,t0 = DemMag.initFromJLD("state_100_0260000.jld"; vo = vo, transf=false)
+st,t0 = DemMag.initFromJLD("st1.jld"; nin = 6, vo = vo, transf=true)
 
 stepInit = 0
-stepEnd = 50_000
-stepSaveSnap = 200
-stepDisplay = 200
-stepSaveState = 264440000
+stepEnd = 1_000_000
+stepSaveSnap = 5_000
+stepDisplay = 5_000
+stepSaveState = 200_000
+
+st.g = [0.003, 0.0, -0.001]
+st.L = L
+st.βn = 0.1
+st.γn = 0.5
 
 
-neighShellWidthCont = 0.1*rc_cont
-neighCutCont = rc_cont + neighShellWidthCont
+neighShellWidthCont = 0.1*rc_con
+neighCutCont = rc_con + neighShellWidthCont
 st.neighCon = neighborList(st, cellCont, neighCutCont)
 maxDisplacementCont = 0.0
 
@@ -49,9 +58,6 @@ pot = []
 kin = []
 println()
 println("#-------------------- running ---------------------")
-st.βn = 0.1
-st.γn = 0.5
-
 writeSnapshot(st, stepInit)
 for t = stepInit+1:stepEnd
 

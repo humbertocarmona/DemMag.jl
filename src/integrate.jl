@@ -89,6 +89,12 @@ function predictorQ!(st::State)
             end
             R = rotationmatrix(st.q[i])
             st.m[i] = R*st.m0[i]
+
+            st.ex[i] = R*st.ex0[i]
+            st.ey[i] = R*st.ey0[i]
+            st.ez[i] = R*st.ez0[i]
+
+
             # st.m[i] = rotationQ(st.q[i], st.m0[i])
             st.ω[i] = evalW(st.q[i], st.qv[i])
       end

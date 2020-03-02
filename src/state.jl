@@ -46,6 +46,15 @@ mutable struct State
     neighMag::Vector{Tuple{Int64,Int64}}
     neighCon::Vector{Tuple{Int64,Int64}}
 
+
+    ex0::Vector{Array{Float64}}
+    ey0::Vector{Array{Float64}}
+    ez0::Vector{Array{Float64}}
+
+    ex::Vector{Array{Float64}}
+    ey::Vector{Array{Float64}}
+    ez::Vector{Array{Float64}}
+
     function State(;N::Int=10)
         r = zeroVec(N)
         r0 = zeroVec(N)
@@ -90,10 +99,13 @@ mutable struct State
         βω = 0.5
         g = [0.0, 0.0, -0.001]
 
+        ex = [[1.0, 0.0, 0.0] for i=1:N]
+        ey = [[0.0, 1.0, 0.0] for i=1:N]
+        ez = [[0.0, 0.0, 1.0] for i=1:N]
         new(N, r, r0, v, v0, a, a1, a2, a3, τ, m, m0, ω,
             q, q0, qv, qv0, qa, qa1, qa2, qa3,
             active, fcontact, fmag, fnormal,
             δt, R, L, vo, mag, kn, kt, γn, μ, βn, βω, g,
-            ζc, ζp, [], [])
+            ζc, ζp, [], [], ex, ey, ez, ex, ey, ez)
     end
 end
