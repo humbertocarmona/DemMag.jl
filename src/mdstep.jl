@@ -8,7 +8,7 @@ function demStep!(st::State, t::Int64)
 
     Ucontact = forceSpring!(st)
     Ubt = forcePlane!(st; nhat = [0.,0.,1.0], pt = [0.0,0.0,0.0])
-    Utp = forcePlane!(st; nhat = [0.,0.,-1.0], pt = [0.,0.,1.0])
+    Utp = forcePlane!(st; nhat = [0.,0.,-1.0], pt = [0.,0.,1.1])
     Umag = forceMag!(st)
     Ugrav = forceGrav!(st)
     forceFriction!(st)

@@ -1,46 +1,54 @@
 using DemMag
 using LinearAlgebra
-using Test
 using Quaternions
 using Plots
 
 println("#------------------- ------- ---------------------")
 mkpath("snaps")
-# removeFilesMaching(r"snap_.+\.vtu", "./snaps/")
+removeFilesMaching(r"snap_.+\.vtu", "./snaps/")
 println("#------------------- ------- ---------------------")
 
 
-N = 100
-diam = 1.0
-rc_con = 1.1*diam
-rc_mag = 5.1*diam
-cellCont = [rc_con, rc_con, rc_con]
-cellMag =  [rc_mag, rc_mag, rc_mag]
-L = [N*rc_con, 2*N*rc_con, 3*rc_mag]
+N = 100             # número de partículas
+diam = 1.0          # diametro da partícula
+rc_con = 1.1*diam   # raio de corte para forca de contato
+rc_mag = 5.1*diam   # raio de corte para força magnética
+cellCont = [rc_con, rc_con, rc_con]  # tamanho das células para forca de contato
+cellMag =  [rc_mag, rc_mag, rc_mag]  # tamanho das células para forca magnetica
+L = [N*rc_con, 2*N*rc_con, 3*rc_mag] # tamanho da área de simulacao
 println("L = $L")
-mag = [0.0, 0.3, 0.0]
-vo = [0.0,0.0,0.0]
-# st = initAsWire(N=N,
-#                 L=L,
-#                 diam=diam,
-#                 mag=mag,
-#                 vo=vo,
-#                 ro=[0.0, 102.5, 0.5])
-# st = initFromCSV("inputdata.csv", L=L)
+mag = [0.0, 0.3, 0.0]  # momento magnético de cada bolinha
+vo = [0.0,0.0,0.0]     # velocidade inicial
 
-st,t0 = DemMag.initFromJLD("st1.jld"; nin = 6, vo = vo, transf=true)
+# inicializaca como um fio de tamanho N
+st = initAsWire(N=N,
+                L=L,
+                diam=diam,
+                mag=mag,
+                vo=vo,
+                ro=[0.0, 100.5, 0.5])
+
+# st = initFromCSV("test/inputdata.csv", L=L)
+
+# st,t0 = DemMag.initFromJLD("s1.jld";
+#                             nin = 6, # 6 bolinhas dentro da caixa
+#                             vo = vo,
+#                             transf=true  # transforma posicao das bolinhas apropriadamente
+#                             )
 
 stepInit = 0
-stepEnd = 1_000_000
-stepSaveSnap = 5_000
-stepDisplay = 5_000
-stepSaveState = 200_000
+stepEnd = 100_000
+stepSaveSnap = 5000
+stepDisplay = 5000
+stepSaveState = 500_000
 
-st.g = [0.003, 0.0, -0.001]
+st.g = [0.000, 0.000, -0.001]
 st.L = L
-st.βn = 0.1
-st.γn = 0.5
 
+st.βn = 0.1  # atrito viscoso global
+st.γn = 0.1  # atrito normal aos planos
+st.kt = 0.1  # atrito tangencial aos planos
+st.μ = 0.5   # coulomb static friction particle-planes...
 
 neighShellWidthCont = 0.1*rc_con
 neighCutCont = rc_con + neighShellWidthCont
@@ -58,9 +66,7 @@ pot = []
 kin = []
 println()
 println("#-------------------- running ---------------------")
-writeSnapshot(st, stepInit)
-for t = stepInit+1:stepEnd
-
+for t = stepInit:stepEnd
     U = demStep!(st, t)
     v2 = [dot(v, v) for v in st.v]
     w2 = [dot(w, w) for w in st.ω]
@@ -94,7 +100,7 @@ for t = stepInit+1:stepEnd
     end
 end
 
-plotly()
-p1 = plot(stp, pot, label = "U")
-# plot!(stp, kin, label = "K")
-plot!(stp, pot .+ kin, label = "E")
+# plotly()
+# p1 = plot(stp, pot, label = "U")
+# # plot!(stp, kin, label = "K")
+# plot!(stp, pot .+ kin, label = "E")

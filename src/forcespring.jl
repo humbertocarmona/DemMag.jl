@@ -42,8 +42,8 @@ function forceSpring!(st::State)
                 st.a[j] = st.a[j] + fj + ft
                 st.a[i] = st.a[i] - fj - ft
 
-                # st.τ[i] = st.τ[i] + τ
-                # st.τ[j] = st.τ[j] + τ
+                st.τ[i] = st.τ[i] + τ
+                st.τ[j] = st.τ[j] + τ
                 st.fcontact[j] = st.fcontact[j] + fj + ft
                 st.fcontact[i] = st.fcontact[i] - fj - ft
                 potEnergy += 0.5 * st.kn * ϵ^2

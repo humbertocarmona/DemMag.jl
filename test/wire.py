@@ -10,10 +10,9 @@ import re
 
 arrowvar = 'none'
 arrowscal = 1.0
-particelevar = 'r'
+particelevar = 'v'
 L = [210.0, 210.0, 15.0]
-L = [50.0, 210.0, 15.0]
-
+L = [110.0, 220.0, 15.3]
 R = 0.5  # 0.442
 vmax = 0.2
 rmax = 5
