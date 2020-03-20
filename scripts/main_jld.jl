@@ -5,7 +5,7 @@ using Plots
 
 println("#------------------- ------- ---------------------")
 mkpath("snaps")
-removeFilesMaching(r"snap_.+\.vtu", "./snaps/")
+# removeFilesMaching(r"snap_.+\.vtu", "./snaps/")
 println("#------------------- ------- ---------------------")
 
 
@@ -20,24 +20,14 @@ println("L = $L")
 mag = [0.0, 0.3, 0.0]  # momento magnético de cada bolinha
 vo = [0.0,0.0,0.0]     # velocidade inicial
 
-# inicializaca como um fio de tamanho N
-st = initAsWire(N=N,
-                L=L,
-                diam=diam,
-                mag=mag,
-                vo=vo,
-                ro=[0.0, 100.5, 0.5])
+st,t0 = DemMag.initFromJLD("state_100_0100000.jld";
+                            vo = vo,
+                            transf=false, # transforma posicao das bolinhas apropriadamente
+                            nin = 6, # 6 bolinhas dentro da caixa
+                            )
 
-# st = initFromCSV("test/inputdata.csv", L=L)
-
-# st,t0 = DemMag.initFromJLD("s1.jld";
-#                             nin = 6, # 6 bolinhas dentro da caixa
-#                             vo = vo,
-#                             transf=true  # transforma posicao das bolinhas apropriadamente
-#                             )
-
-stepInit = 0
-stepEnd = 100_000
+stepInit = 100_001
+stepEnd = 200_000
 stepSaveSnap = 5000
 stepDisplay = 5000
 stepSaveState = 500_000

@@ -20,14 +20,13 @@ viewref = True
 
 #  disable automatic camera reset on 'Show'
 paraview.simple._DisableFirstRenderCameraReset( )
-findCommand = 'find {:}  -regex "{:}" |sort'.format("./snaps/", ".*snap_.*\.vtu")
+findCommand = 'find {:}  -regex "{:}" |sort'.format("./", ".*snap_.*\.vtu")
 
 files = check_output(findCommand, shell=True)
 files = files.decode("utf-8")
 files = files.strip()  # required to remove last blank line
 files = re.split('\n', files)
 
-print(files[1],"..",files[-1])
 
 # create a new 'XML Unstructured Grid Reader'
 snap_0 = XMLUnstructuredGridReader(FileName=files)

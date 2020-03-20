@@ -1,7 +1,7 @@
-function writeSnapshot(st::State, t::Int64)
+function writeSnapshot(st::State, t::Int64; fprefix::String = "snap", folder::String = "./snaps")
     N = st.N
     step = lpad(t, 7, "0")
-    fname = "./snaps/snap_$step.vtu"
+    fname = "$folder/$(fprefix)_$step.vtu"
     x = [st.r[i][1] for i = 1:N]
     y = [st.r[i][2] for i = 1:N]
     z = [st.r[i][3] for i = 1:N]
@@ -66,9 +66,9 @@ function writeSnapshot(st::State, t::Int64)
 end
 
 
-function dumpState(st::State, t::Int64)
+function dumpState(st::State, t::Int64; fprefix::String = "state", folder::String = "./results")
     step = lpad(t, 7, "0")
     sn = lpad(st.N,3,"0")
-    fname = "state_$(sn)_$step.jld"
+    fname = "$folder/$fprefix_$(sn)_$step.jld"
     save(fname,"p",st)
 end
