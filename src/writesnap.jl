@@ -69,6 +69,6 @@ end
 function dumpState(st::State, t::Int64; fprefix::String = "state", folder::String = "./results")
     step = lpad(t, 7, "0")
     sn = lpad(st.N,3,"0")
-    fname = "$folder/$(fprefix)_$(sn)_$step.jld"
+    fname = "$folder/$fprefix_$(sn)_$step.jld"
     save(fname,"p",st)
 end

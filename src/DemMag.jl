@@ -1,3 +1,5 @@
+__precompile__()
+
 module DemMag
     using Quaternions
     using StaticArrays
@@ -53,6 +55,7 @@ module DemMag
     export State,
            initAsWire,
            initFromCSV,
+           initFromJLD,
            zeroVec,
            neighborList,
            demStep!,
